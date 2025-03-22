@@ -16,6 +16,18 @@ if not SUPABASE_URL or not SUPABASE_KEY:
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 app = FastAPI()
+from fastapi.middleware.cors import CORSMiddleware
+
+app = FastAPI()
+
+# ✅ Enable CORS for React frontend
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000", "http://localhost:3001"],  # React ports
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 class ScoreInput(BaseModel):
     user_id: str
@@ -84,21 +96,3 @@ def get_score(user_id: str = Query(..., description="User UUID")):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@app.get("/get-score-by-username")
-def get_score_by_username(username: str = Query(..., description="Username")):
-    try:
-        response = supabase.table("profiles").select("points, id").eq("username", username).execute()
-
-        print("🔍 Supabase Response:", response)
-
-        if not response.data:
-            raise HTTPException(status_code=404, detail="User not found")
-
-        return {
-            "username": username,
-            "user_id": response.data[0]["id"],
-            "points": response.data[0]["points"]
-        }
-
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
