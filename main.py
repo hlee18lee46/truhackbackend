@@ -56,6 +56,10 @@ def initialize_score(data: ScoreInput):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+@app.get("/ping")
+async def ping():
+    return {"status": "alive"}
+
 
 @app.post("/add-score")
 def add_score(data: ScoreInput):
