@@ -28,7 +28,7 @@ app = FastAPI()
 # ✅ Enable CORS for React frontend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://localhost:3001"],  # React ports
+    allow_origins=["http://localhost:3000", "http://localhost:3001", "https://3ce3-70-126-30-23.ngrok-free.app"],  # React ports
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
